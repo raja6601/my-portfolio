@@ -1,0 +1,342 @@
+<!--
+Custom Portfolio Website (single-file)
+Replace placeholder text/images/videos with your own content.
+Instructions:
+1. Save this file as index.html
+2. Replace all placeholders (YOUR NAME, bio, images, youtube IDs)
+3. To deploy: upload to GitHub Pages / Netlify / Vercel. For contact form, replace FORMSPREE_ENDPOINT with your Formspree form action URL.
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Raja Mudassir — Graphic Designer & Video Editor</title>
+  <meta name="description" content="Portfolio of Raja Mudassir — Graphic design, motion graphics, and video editing." />
+  <link rel="icon" href="data:;base64,iVBORw0KGgo="> <!-- tiny blank favicon -->
+
+  <style>
+    :root{
+      --bg:#0f1724; --card:#0b1220; --accent:#7c3aed; --muted:#9aa4b2; --glass: rgba(255,255,255,0.04);
+      --max-width:1100px; --radius:14px;
+      --ff-sans: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family:var(--ff-sans); background:linear-gradient(180deg,#071126 0%, #07121a 60%); color:#e6eef8;
+      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; line-height:1.4;
+    }
+    .wrap{max-width:var(--max-width); margin:32px auto; padding:28px;}
+
+    /* Header */
+    header{display:flex; align-items:center; justify-content:space-between; gap:16px;}
+    .brand{display:flex; align-items:center; gap:12px}
+    .logo{width:56px; height:56px; background:linear-gradient(135deg,var(--accent), #2dd4bf); border-radius:12px; display:flex; align-items:center; justify-content:center; font-weight:700; color:white; font-size:18px;}
+    .brand h1{margin:0; font-size:18px}
+    nav{display:flex; gap:12px}
+    nav a{color:var(--muted); text-decoration:none; padding:8px 12px; border-radius:10px}
+    nav a:hover{color:#fff; background:rgba(255,255,255,0.03)}
+    .cta{background:linear-gradient(90deg,var(--accent), #06b6d4); padding:10px 14px; border-radius:10px; color:white; text-decoration:none}
+
+    /* Hero */
+    .hero{display:grid; grid-template-columns:1fr 420px; gap:28px; align-items:center; margin-top:28px}
+    .hero-left h2{font-size:34px; margin:0 0 12px}
+    .hero-left p{color:var(--muted); margin:0 0 18px}
+    .skills{display:flex; gap:6px; flex-wrap:wrap}
+    .chip{background:var(--glass); padding:8px 10px; border-radius:999px; color:var(--muted); font-size:13px}
+
+    .hero-right{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); padding:16px; border-radius:12px; box-shadow:0 6px 20px rgba(2,6,23,0.6)}
+    .profile{display:grid; grid-template-columns:86px 1fr; gap:12px; align-items:center}
+    .avatar{width:86px; height:86px; border-radius:12px; background:linear-gradient(135deg,#334155,#0ea5a4); display:flex; align-items:center; justify-content:center; font-size:26px; font-weight:700; color:white}
+    .meta h3{margin:0 0 4px}
+    .meta p{margin:0; color:var(--muted); font-size:14px}
+
+    /* Portfolio grid */
+    section.portfolio{margin-top:32px}
+    .grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:16px}
+    .card{background:var(--card); border-radius:12px; overflow:hidden; cursor:pointer; transition:transform .25s ease, box-shadow .25s ease}
+    .card:hover{transform:translateY(-6px); box-shadow:0 14px 40px rgba(2,6,23,0.7)}
+    .thumb{height:160px; background-size:cover; background-position:center}
+    .card .info{padding:12px}
+    .card h4{margin:0 0 6px}
+    .card p{margin:0; color:var(--muted); font-size:13px}
+
+    /* Video row */
+    .videos{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:12px; margin-top:18px}
+    .video-embed{background:#000; border-radius:10px; overflow:hidden}
+    iframe{width:100%; height:200px; border:0}
+
+    /* About & Services */
+    .split{display:grid; grid-template-columns:1fr 320px; gap:18px; margin-top:28px}
+    .card-box{background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent); padding:18px; border-radius:12px}
+    .services li{margin-bottom:10px; color:var(--muted)}
+
+    /* Contact */
+    form{display:grid; gap:12px}
+    input,textarea{background:transparent; border:1px solid rgba(255,255,255,0.06); padding:12px; border-radius:10px; color:#e6eef8}
+    button{background:linear-gradient(90deg,var(--accent), #06b6d4); border:0; padding:12px 16px; border-radius:10px; color:white; cursor:pointer}
+
+    footer{margin-top:36px; color:var(--muted); font-size:13px; text-align:center}
+
+    /* Modal lightbox */
+    .modal{position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(2,6,23,0.6); z-index:60}
+    .modal.show{display:flex}
+    .modal .box{max-width:920px; width:95%; background:#071123; border-radius:12px; overflow:hidden}
+    .modal .box .media{height:520px; background:#000; display:flex; align-items:center; justify-content:center}
+    .modal .meta{padding:16px}
+    .close{position:absolute; right:18px; top:18px; background:rgba(255,255,255,0.06); border-radius:8px; padding:8px; cursor:pointer}
+
+    /* Responsive */
+    @media (max-width:880px){
+      .hero{grid-template-columns:1fr;}
+      .split{grid-template-columns:1fr}
+      .hero-right{order:3}
+    }
+    @media (max-width:420px){
+      .avatar{width:72px; height:72px}
+      .hero-left h2{font-size:26px}
+    }
+
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="logo">RM</div>
+        <div>
+          <h1>Raja Mudassir</h1>
+          <div style="color:var(--muted); font-size:13px">Graphic Designer & Video Editor</div>
+        </div>
+      </div>
+      <nav>
+        <a href="#portfolio">Portfolio</a>
+        <a href="#services">Services</a>
+        <a href="#about">About</a>
+        <a href="#contact" class="cta">Hire Me</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="hero-left">
+          <h2>Designing visuals that tell your brand’s story.<br><span style="color:var(--accent);">Logos • Social • Motion • Video</span></h2>
+          <p>I'm a freelance graphic designer and video editor focused on creating clean, impactful visuals for brands and creators. I blend design thinking with cinematic editing to deliver polished results.</p>
+
+          <div class="skills">
+            <div class="chip">Adobe Photoshop</div>
+            <div class="chip">Illustrator</div>
+            <div class="chip">Premiere Pro</div>
+            <div class="chip">After Effects</div>
+            <div class="chip">DaVinci Resolve</div>
+            <div class="chip">Branding</div>
+          </div>
+
+          <div style="margin-top:18px">
+            <a href="#portfolio" class="cta">View Work</a>
+            <a href="#contact" style="margin-left:10px; color:var(--muted); text-decoration:none">Contact</a>
+          </div>
+        </div>
+
+        <aside class="hero-right">
+          <div class="profile">
+            <div class="avatar">RM</div>
+            <div class="meta">
+              <h3>Raja Mudassir</h3>
+              <p>Visual storyteller. I design brand identities and craft sharp video edits for digital platforms.</p>
+              <div style="margin-top:8px; color:var(--muted); font-size:13px">Based in Islamabad • Available for freelance</div>
+            </div>
+          </div>
+
+          <div style="margin-top:14px; display:flex; gap:8px; align-items:center; justify-content:space-between">
+            <div style="font-size:13px; color:var(--muted)">Contact</div>
+            <div style="text-align:right">
+              <div style="font-weight:700">+92 300 0000000</div>
+              <div style="color:var(--muted); font-size:13px">email@example.com</div>
+            </div>
+          </div>
+        </aside>
+      </section>
+
+      <!-- Portfolio -->
+      <section id="portfolio" class="portfolio">
+        <h3 style="margin-bottom:12px">Featured Projects</h3>
+        <div class="grid" id="gallery">
+          <!-- Card 1 (image) -->
+          <div class="card" data-type="image" data-title="Brand Identity — Noor" data-src="https://images.unsplash.com/photo-1496307042754-b4aa456c4a2d?q=80&w=1600&auto=format&fit=crop&ixlib=rb-4.0.3&s=000000">
+            <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1496307042754-b4aa456c4a2d?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=000000')"></div>
+            <div class="info"><h4>Brand Identity — Noor</h4><p>Logo, color system, and stationery</p></div>
+          </div>
+
+          <!-- Card 2 (image) -->
+          <div class="card" data-type="image" data-title="Poster Series — Urban Beats" data-src="https://images.unsplash.com/photo-1520975914079-5f5f7a7f2f99?q=80&w=1600&auto=format&fit=crop&ixlib=rb-4.0.3&s=000000">
+            <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1520975914079-5f5f7a7f2f99?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=000000')"></div>
+            <div class="info"><h4>Poster Series — Urban Beats</h4><p>Event posters & social assets</p></div>
+          </div>
+
+          <!-- Card 3 (video) -->
+          <div class="card" data-type="video" data-title="Promo Edit — Summer Drop" data-src="https://www.youtube.com/embed/ScMzIvxBSi4">
+            <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1503602642458-232111445657?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=000000')"></div>
+            <div class="info"><h4>Promo Edit — Summer Drop</h4><p>30s promo edit for social platforms</p></div>
+          </div>
+
+          <!-- Card 4 (image) -->
+          <div class="card" data-type="image" data-title="Packaging Design — Botanica" data-src="https://images.unsplash.com/photo-1507608869276-6a7d3a6d1d4d?q=80&w=1600&auto=format&fit=crop&ixlib=rb-4.0.3&s=000000">
+            <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1507608869276-6a7d3a6d1d4d?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=000000')"></div>
+            <div class="info"><h4>Packaging Design — Botanica</h4><p>Labeling and dielines</p></div>
+          </div>
+
+          <!-- Card 5 (video) -->
+          <div class="card" data-type="video" data-title="Editing Reel" data-src="https://www.youtube.com/embed/ysz5S6PUM-U">
+            <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=000000')"></div>
+            <div class="info"><h4>Editing Reel</h4><p>Highlights from recent projects</p></div>
+          </div>
+
+        </div>
+
+        <!-- Video embeds row (optional additional videos) -->
+        <div class="videos" style="margin-top:18px">
+          <div class="video-embed"><iframe src="https://www.youtube.com/embed/ysz5S6PUM-U" title="YouTube video" allowfullscreen></iframe></div>
+          <div class="video-embed"><iframe src="https://www.youtube.com/embed/ScMzIvxBSi4" title="YouTube video" allowfullscreen></iframe></div>
+        </div>
+      </section>
+
+      <!-- About & Services -->
+      <section id="about" class="split">
+        <div class="card-box">
+          <h3>About Me</h3>
+          <p style="color:var(--muted)">I’m a multidisciplinary designer who loves creating brand identities and telling stories through motion. My workflow blends research, strong composition, and color with pixel-perfect execution in Adobe and DaVinci tools. I’ve worked with startups, musicians, and small businesses to create visuals that convert and engage.</p>
+
+          <h4 style="margin-top:14px">Tools I Use</h4>
+          <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:8px">
+            <div class="chip">Photoshop</div>
+            <div class="chip">Illustrator</div>
+            <div class="chip">Premiere Pro</div>
+            <div class="chip">After Effects</div>
+            <div class="chip">DaVinci Resolve</div>
+            <div class="chip">Figma</div>
+          </div>
+        </div>
+
+        <aside class="card-box">
+          <h3 id="services">Services</h3>
+          <ul class="services">
+            <li><strong>Branding & Logo</strong> — visual identity systems, stationery.</li>
+            <li><strong>Social Media Design</strong> — carousels, shorts, stories, ads.</li>
+            <li><strong>Video Editing</strong> — promos, reels, YouTube edits, color grading.</li>
+            <li><strong>Motion Graphics</strong> — titles, lower-thirds, animated logos.</li>
+          </ul>
+
+          <div style="margin-top:12px; display:flex; gap:8px">
+            <a class="cta" href="#contact">Work with me</a>
+            <a style="color:var(--muted); text-decoration:none; padding:10px 12px; border-radius:10px; background:transparent">Download CV</a>
+          </div>
+        </aside>
+      </section>
+
+      <!-- Contact -->
+      <section id="contact" style="margin-top:26px">
+        <div class="card-box">
+          <h3>Contact Me</h3>
+          <p style="color:var(--muted)">Interested in working together? Send a quick message and I’ll reply within 48 hours.</p>
+
+          <!-- Replace FORMSPREE_ENDPOINT with your Formspree form action URL -->
+          <form id="contactForm" action="https://formspree.io/f/yourFormEndpoint" method="POST">
+            <input type="text" name="name" placeholder="Your name" required />
+            <input type="email" name="email" placeholder="Your email" required />
+            <input type="text" name="subject" placeholder="Subject" />
+            <textarea name="message" rows="5" placeholder="Tell me about the project" required></textarea>
+            <button type="submit">Send Message</button>
+          </form>
+
+          <div id="formMsg" style="margin-top:10px; color:var(--muted); font-size:13px"></div>
+
+        </div>
+      </section>
+
+      <footer>
+        © <span id="year"></span> Raja Mudassir — Built with ❤️ • <a href="#" style="color:var(--muted); text-decoration:none">Instagram</a> • <a href="#" style="color:var(--muted); text-decoration:none">Behance</a>
+      </footer>
+    </main>
+  </div>
+
+  <!-- Modal Lightbox -->
+  <div class="modal" id="modal">
+    <div class="box">
+      <div style="position:relative">
+        <button class="close" id="closeBtn">✕</button>
+        <div class="media" id="modalMedia" style="height:520px; display:flex; align-items:center; justify-content:center; background:#000"></div>
+      </div>
+      <div class="meta" id="modalMeta"></div>
+    </div>
+  </div>
+
+  <script>
+    // Basic interactivity: lightbox for portfolio cards
+    const cards = document.querySelectorAll('.card');
+    const modal = document.getElementById('modal');
+    const modalMedia = document.getElementById('modalMedia');
+    const modalMeta = document.getElementById('modalMeta');
+    const closeBtn = document.getElementById('closeBtn');
+
+    function openModal(type, src, title){
+      modal.classList.add('show');
+      modalMeta.innerHTML = `<strong>${title}</strong>`;
+      if(type === 'image'){
+        modalMedia.innerHTML = `<img src="${src}" alt="${title}" style="max-width:100%; max-height:100%; object-fit:contain">`;
+      } else if(type === 'video'){
+        // Use iframe for video src (expects embed url)
+        modalMedia.innerHTML = `<iframe src="${src}" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>`;
+      }
+    }
+
+    function closeModal(){
+      modal.classList.remove('show');
+      modalMedia.innerHTML = '';
+    }
+
+    cards.forEach(card => {
+      card.addEventListener('click', ()=>{
+        const type = card.dataset.type;
+        const src = card.dataset.src;
+        const title = card.dataset.title;
+        openModal(type, src, title);
+      })
+    })
+
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e)=>{ if(e.target === modal) closeModal(); });
+
+    // Contact form submit handler (shows friendly message) - Formspree handles sending
+    const form = document.getElementById('contactForm');
+    const formMsg = document.getElementById('formMsg');
+    form.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const action = form.action;
+      // simple AJAX submit to keep user on page
+      fetch(action, {method:'POST', body:new FormData(form), headers:{'Accept':'application/json'}})
+        .then(resp=>{
+          if(resp.ok){ formMsg.innerText = 'Thanks! Your message was sent.'; form.reset(); }
+          else { formMsg.innerText = 'Oops — there was a problem. Please try again.'; }
+        }).catch(()=>{ formMsg.innerText = 'Network error. Please try again later.'; });
+    });
+
+    // set year
+    document.getElementById('year').innerText = new Date().getFullYear();
+
+    // Smooth scrolling for nav
+    document.querySelectorAll('a[href^="#"]').forEach(a=>{
+      a.addEventListener('click',(e)=>{
+        const href = a.getAttribute('href');
+        if(href.startsWith('#')){
+          e.preventDefault();
+          document.querySelector(href).scrollIntoView({behavior:'smooth'});
+        }
+      })
+    })
+
+  </script>
+</body>
+</html>
